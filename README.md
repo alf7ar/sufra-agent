@@ -15,6 +15,8 @@ asks for confirmation, places the order and remembers it for next time.
 
 ![demo](docs/demo.gif)
 
+**Demo video (2:28):** https://youtu.be/SZEdZX-qNFk
+
 | Reorder with a tweak | Add an item | Confirm |
 |---|---|---|
 | ![](docs/02-reorder-no-onions.png) | ![](docs/03-add-juice.png) | ![](docs/04-confirmed.png) |

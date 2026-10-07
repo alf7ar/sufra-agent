@@ -1,5 +1,7 @@
 # Devpost description draft (Alexa+ track)
 
+Demo video (2:28, English narration, unlisted YouTube): https://youtu.be/SZEdZX-qNFk
+
 **Sufra: Egyptian-Arabic restaurant ordering for Alexa+ via MCP**
 
 Millions of restaurant orders in Egypt still happen by phone call or chat, in dialect, with edits like "same as Friday, no onions".
