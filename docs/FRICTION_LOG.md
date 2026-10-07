@@ -1,0 +1,10 @@
+# Friction log (Alexa+ MCP add-on documentation, as experienced while building)
+
+| # | Step | Expected vs actual | Severity | Workaround | Suggestion |
+|---|---|---|---|---|---|
+| 1 | Reading the MCP add-on auth requirements | The page says to host Protected Resource Metadata at `/.well-known/oauth-authorization-server` and also says 401 must carry no `WWW-Authenticate` header. RFC 9728 puts PRM at `/.well-known/oauth-protected-resource` and normally uses `WWW-Authenticate: resource_metadata=...`. Unclear which discovery path Alexa+ actually calls | Medium | Served both paths; 401 without `WWW-Authenticate`, asserted in tests | State the exact URLs Alexa+ requests and show a sample 401 and PRM response |
+| 2 | Finding out whether my account/region can test | Docs do not say which accounts, devices or regions can enable an MCP add-on, or whether Arabic is supported | High (blocks real-device testing) | Built a web simulator, which the hackathon rules allow | A "who can test this today" table (country, language, account type) |
+| 3 | Category vs general add-ons | The MCP add-on guide lists "ride booking only" as the supported category, while the hackathon encourages food/commerce ideas | Medium | Built the server as a general MCP add-on and documented the assumption | Say whether non-category add-ons can be used in the hackathon track |
+| 4 | Latency target | "Round-trip under 500 ms" is stated, with no guidance on what is measured (first byte? full tool result?) | Low | Tools are deterministic and local (no LLM inside the server); LLM runs in the host | Define the measurement point |
+| 5 | Redirect URIs for account linking | No list of Alexa redirect hosts in the MCP guide (known from the skill account-linking docs) | Low | Allow-listed the Alexa account-linking hosts plus localhost | Link the host list from the MCP page |
+| 6 | Devpost rules page | Not an Alexa issue: the official rules page was unreachable (HTTP 429 / maintenance) for part of the build week and had to be read from an archive | Low | Archive copy | n/a |

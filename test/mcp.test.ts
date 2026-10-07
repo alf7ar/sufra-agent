@@ -28,7 +28,7 @@ async function connect(token = TOKEN) {
   return { client, transport };
 }
 const call = async (c: Client, name: string, args: Record<string, unknown> = {}) => {
-  const r = await c.callTool({ name, arguments: args });
+  const r: any = await c.callTool({ name, arguments: args });
   return { ...r, data: r.structuredContent as any };
 };
 

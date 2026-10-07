@@ -51,6 +51,9 @@ export class Store {
     return (this.data.customers[id] ??= { prefs: {}, orders: [], cart: [] });
   }
 
+  /** Wipe all customers (demo reset). */
+  clear() { this.data = { seq: 0, customers: {} }; this.save(); }
+
   getCart(id: string): CartLine[] { return this.cust(id).cart; }
   setCart(id: string, cart: CartLine[]) { this.cust(id).cart = cart; this.save(); }
 
