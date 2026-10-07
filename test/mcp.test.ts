@@ -87,7 +87,7 @@ describe("auth", () => {
     const h = { "content-type": "application/json", accept: "application/json, text/event-stream" };
     const a = await fetch(`${base}/mcp`, { method: "POST", headers: h, body });
     expect(a.status).toBe(401);
-    expect(a.headers.get("www-authenticate")).toBeNull(); // per Alexa+ docs
+    expect(a.headers.get("www-authenticate")).toBeNull(); // Alexa+ guide: "401 Unauthorized (without a WWW-Authenticate header)"
     const b = await fetch(`${base}/mcp`, { method: "POST", headers: { ...h, authorization: "Bearer nope" }, body });
     expect(b.status).toBe(401);
   });

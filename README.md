@@ -25,7 +25,7 @@ Mobile layout: [docs/mobile.png](docs/mobile.png).
 
 | Real | Simulated / out of scope |
 |---|---|
-| MCP server, 11 tools, Streamable HTTP, protocol `2025-11-25` (asserted in tests) | No Alexa+ device or Alexa+ account was used; Alexa+ does not support Egyptian Arabic today, so the host is a web simulator |
+| MCP server, 11 tools, Streamable HTTP, protocol `2025-11-25` (asserted in tests) | No Alexa+ device or Alexa+ account was used; No Alexa+ device or Egyptian-Arabic Alexa+ access was available to test with, so the host is a web simulator |
 | OAuth 2.1 authorization-code + PKCE (S256) demo flow, discovery metadata, 401 on missing token | One fictional customer, auto-approved; the access token is static. Production needs a real identity provider |
 | Arabic normalisation + dialect-alias search, modifiers ("no onions"), 14% VAT in integer piasters | Menu, restaurant and customer are fictional demo data |
 | Order memory across sessions (JSON file), weekday / "yesterday" resolution in Cairo time | No payment (the PayPal entry adds checkout) and no real kitchen: order status is derived from elapsed time |
@@ -41,9 +41,9 @@ flowchart LR
   end
   UI -- "POST /api/chat" --> HOST
   subgraph Node["Node 22 process (src/)"]
-    HOST["AgentHost: LLM tool-calling loop\n(OpenAI-compatible, or rules mode without a key)"]
+    HOST["AgentHost: LLM tool-calling loop<br/>(OpenAI-compatible, or rules mode without a key)"]
     HOST -- "MCP Streamable HTTP + Bearer" --> MCP
-    MCP["MCP server /mcp\n11 tools, 401 + PRM + PKCE"]
+    MCP["MCP server /mcp<br/>11 tools, 401 + PRM + PKCE"]
     MCP --> CORE
     subgraph CORE["Shared core (src/core)"]
       M["menu + Arabic search"] --- C["cart + VAT quote"] --- S["memory: orders, prefs"]
@@ -93,12 +93,13 @@ curl -s http://127.0.0.1:8787/mcp -H 'authorization: Bearer sufra-demo-token' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
-Or with the MCP Inspector: `npx @modelcontextprotocol/inspector` and connect to `http://127.0.0.1:8787/mcp` (Streamable HTTP) with the header `Authorization: Bearer sufra-demo-token`.
+The MCP Inspector (`npx @modelcontextprotocol/inspector`, not run during this build) should also connect to `http://127.0.0.1:8787/mcp` (Streamable HTTP) with the header `Authorization: Bearer sufra-demo-token`.
 
 ### Expose it to Alexa+ (remote HTTPS URL)
 
 Alexa+ needs a public HTTPS URL: `cloudflared tunnel --url http://127.0.0.1:8787`, then use the printed URL.
 Discovery endpoints served: `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server` (S256), `/authorize`, `/token`.
+Following the Alexa+ MCP add-on guide ("returns `401 Unauthorized` (without a `WWW-Authenticate` header)"; PRM "according to RFC 9728"; auth server metadata at `/.well-known/oauth-authorization-server`), the 401 carries no `WWW-Authenticate` header. Note the MCP spec itself uses that header for discovery; the Alexa+ guide lists it under "Not Supported Yet".
 Only Alexa account-linking redirect hosts and localhost are accepted as `redirect_uri` (`SUFRA_ALLOWED_REDIRECT_HOSTS`).
 Set `SUFRA_BEARER_TOKEN` to a random value if you expose the server.
 
@@ -125,7 +126,7 @@ See [docs/FRICTION_LOG.md](docs/FRICTION_LOG.md).
 
 ## Limits and honesty
 
-* Not tested on a real Alexa+ device. Alexa+ availability in Egypt and Arabic (Egyptian dialect) support are not confirmed; the simulator stands in for it.
+* Not tested on a real Alexa+ device. Alexa+ availability in Egypt and Egyptian-dialect support were not verified; the simulator stands in for it.
 * Order state lives in a local JSON file; there is no concurrency control, multi-tenant isolation or real POS integration.
 * LLM replies depend on the model; the rules mode is a fallback, not a language-understanding system.
 
